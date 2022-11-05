@@ -1,0 +1,10 @@
+.auth__text {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF;
+    margin: 0 auto 80px;
+    text-decoration: none;
+}
