@@ -35,17 +35,19 @@ function App() {
     const [successfulReg, setSuccessfulReg] = useState(false);
     const history = useHistory();
 
+    useEffect(() => {
+        if (loggedIn) {
+            Promise.all([apiData.getUserProfile(), apiData.getInitialCards()])
+                .then(([userData, cards]) => {
+                    setCurrentUser(userData);
+                    setCards(cards);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
 
-    React.useEffect(() => {
-        Promise.all([apiData.getUserProfile(), apiData.getInitialCards()])
-            .then(([userData, cards]) => {
-                setCurrentUser(userData);
-                setCards(cards);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    }, [loggedIn]);
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
@@ -96,7 +98,6 @@ function App() {
             });
     }
 
-
     function closeAllPopups() {
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
@@ -142,10 +143,10 @@ function App() {
             });
     }
 
-    function handleLogin(password, email){
+    function handleLogin(password, email) {
         auth.login(password, email)
             .then(data => {
-                if(data.token){
+                if (data.token) {
                     setLoggedIn(true);
                     setEmail(email);
                     localStorage.setItem('token', data.token);
@@ -159,10 +160,10 @@ function App() {
             })
     }
 
-    function handleReg(password, email){
+    function handleReg(password, email) {
         auth.register(password, email)
             .then(data => {
-                if(data.data._id){
+                if (data.data._id) {
                     setSuccessfulReg(true);
                     setInfoToolOpen(true);
                     history.push('/sign-in');
@@ -175,7 +176,7 @@ function App() {
             });
     }
 
-    function handleLogOut(){
+    function handleLogOut() {
         localStorage.removeItem('token');
         setLoggedIn(false);
         setEmail('');
@@ -183,7 +184,6 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-
         if (token) {
             auth.checkToken(token)
                 .then(res => {
@@ -195,17 +195,16 @@ function App() {
                 })
                 .catch(err => console.log(err));
         }
-    },[history] )
-
+    }, [history])
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <CardsContext.Provider value={cards}>
                 <div>
                     <Header
-                    loggedIn={loggedIn}
-                    handleLogOut={handleLogOut}
-                    email={email}
+                        loggedIn={loggedIn}
+                        handleLogOut={handleLogOut}
+                        email={email}
                     />
 
                     <Switch>
@@ -220,20 +219,21 @@ function App() {
                                         component={Main}
                         />
                         <Route path="/sign-in">
-                            <Login handleLogin={handleLogin} />
+                            <Login handleLogin={handleLogin}/>
                         </Route>
                         <Route path="/sign-up">
-                            <Register handleReg={handleReg} />
+                            <Register handleReg={handleReg}/>
                         </Route>
                         <Route exact path="/sign-in">
-                            {loggedIn ? <Redirect to="/" />
-                                        : <Redirect to="/sign-in"/>}
+                            {loggedIn ? <Redirect to="/"/>
+                                : <Redirect to="/sign-in"/>}
                         </Route>
                         <Route path="/react-mesto-auth">
-                            {loggedIn ? <Redirect to="/" />
-                                : <Redirect to='/sign-up' />}
+                            {loggedIn ? <Redirect to="/"/>
+                                : <Redirect to='/sign-up'/>}
                         </Route>
                     </Switch>
+
                     <Footer/>
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
                                       onUpdateUser={handleUpdateUser}/>
@@ -248,7 +248,7 @@ function App() {
                         isOpen={isInfoToolOpen}
                         onClose={closeAllPopups}
                         successfulReg={successfulReg}
-                        />
+                    />
                 </div>
             </CardsContext.Provider>
         </CurrentUserContext.Provider>

@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/valvdov/react-mesto-auth/issues"
   },
-  "homepage": "https://valvdov.github.io/react-mesto-auth/",
+  "homepage": "https://valvdov.github.io/react-mesto-auth",
   "eslintConfig": {
     "extends": [
       "react-app",
