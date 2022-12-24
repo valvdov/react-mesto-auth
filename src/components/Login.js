@@ -1,49 +1,37 @@
-import { useState } from 'react';
-import {withRouter} from "react-router-dom";
+import React, {useState} from 'react';
+// import {withRouter} from "react-router-dom";
 
-const Login = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    function handleLoginSubmit(e) {
-        e.preventDefault();
-        if (!email || !password) {
-            return;
-        } else {
-            props.handleLogin(password, email);
-            setEmail('');
-            setPassword('');
-        }
-    }
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
 
-    function handleEmail(e) {
-        setEmail(e.target.value);
-    }
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+  }
 
-    function handlePassword(e) {
-        setPassword(e.target.value);
-    }
 
-    return (
-        <section className="login">
-            <h1 className="auth__title">
-                Вход
-            </h1>
-            <form className="auth__form">
-                <input type="email"
-                       id="email"
-                       onChange={handleEmail}
-                       placeholder="Email"
-                       className="auth__input"/>
-                <input type="password"
-                       id="password"
-                       onChange={handlePassword}
-                       placeholder="Пароль"
-                       className="auth__input"/>
-                <button onClick={handleLoginSubmit} className="auth__button">Войти</button>
-            </form>
-        </section>
-    )
+  function handleSubmit(e) {
+    e.preventDefault();
+    onLogin(email, password);
+  }
+
+  return (
+    <div className="auth">
+      <div className="auth__container">
+        <form name="login" className="auth__form" id="login-form" noValidate onSubmit={handleSubmit}>
+          <h2 className="auth__title">Вход</h2>
+          <input name="login-email" className="auth__input" id="login-email-input" type="text" placeholder="Email" value={email} onChange={handleChangeEmail} />
+          <input name="login-password" className="auth__input" id="login-password-input" type="password" placeholder="Пароль" value={password} onChange={handleChangePassword} />
+          <button type="submit" className="auth__button-save" id="auth-button-save-login">Войти</button>
+          <button type="button" className="auth__button" id="auth-button-login" style={{ cursor: 'auto' }}></button>
+        </form>
+      </div>
+    </div>
+  )
 }
 
-export default withRouter(Login);
+export default Login;

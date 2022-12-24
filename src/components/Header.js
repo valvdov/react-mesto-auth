@@ -1,43 +1,50 @@
-import React from "react";
-import headerLogo from "../images/logo_white.svg";
-import {Link, Route, Switch} from "react-router-dom";
+import React, { useState } from 'react';
+import logo from '../images/logo.svg';
+import { Link, useLocation } from 'react-router-dom';
 
-function Header(props) {
-    return (
-        <header className="header">
-            <img
-                src={headerLogo}
-                className="logo"
-                alt="ЛОГО МЕСТО"
-            />
-            <Switch>
-                <Route exact path="/">
-                    <div className="header__info">
-                        <span className="header__email">{props.email}</span>
-                        <Link
-                            to="/sign-in"
-                            onClick={props.handleLogOut}
-                            className="header__link"
-                        >
-                            Выйти
-                        </Link>
-                    </div>
-                </Route>
+function Header({ userEmail, onSignOut }) {
+  const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-                <Route path="/sign-in">
-                    <Link to="/sign-up" className="header__link">
-                        Регистрация
-                    </Link>
-                </Route>
+  function handleToggleMenu() {
+    setIsMenuOpen(!isMenuOpen);
+  }
 
-                <Route path="/sign-up">
-                    <Link to="/sign-in" className="header__link">
-                        Войти
-                    </Link>
-                </Route>
-            </Switch>
-        </header>
-    );
+  function handleSignOut() {
+    setIsMenuOpen(false);
+    onSignOut();
+  }
+
+  return (
+    <header className="header">
+      <div className={`header__burger-info ${isMenuOpen ? "header__burger-info_opened" : ""}`}>
+        <span className="header__email">{userEmail}</span>
+        <button className="header__sign-out" onClick={handleSignOut} >Выйти</button>
+      </div>
+      <div className="header__container">
+        <img className="header__logo" src={logo} alt="ЛОГО МЕСТО" />
+        {location.pathname === '/signin' && (
+          <Link to="/signup" className="header__link">
+            Регистрация
+          </Link>
+        )}
+        {location.pathname === '/signup' && (
+          <Link to="/signin" className="header__link">
+            Войти
+          </Link>
+        )}
+        {location.pathname === '/' && (
+          <>
+            <button className={`header__menu-button ${isMenuOpen ? "header__menu-button_opened" : ""}`} onClick={() => handleToggleMenu()} ></button>
+            <nav className="header__nav">
+              <span className="header__email">{userEmail}</span>
+              <button className="header__sign-out" onClick={() => onSignOut()}>Выйти</button>
+            </nav>
+          </>
+        )}
+      </div>
+    </header>
+  )
 }
 
 export default Header;

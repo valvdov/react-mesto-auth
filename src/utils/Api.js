@@ -1,78 +1,85 @@
 class Api {
-    constructor({baseUrl, headers}) {
-        this._baseUrl = baseUrl;
-        this._headers = headers;
+  constructor(options) {
+    this._url = options.baseUrl;
+    this._headers = options.headers;
+  }
+
+  getUserProfile() {
+    return fetch(`${this._url}/users/me`, {
+      method: 'GET',
+      headers: this._headers,
+    }).then((res) => this._getResponse(res))
+  }
+
+  getCards() {
+    return fetch(`${this._url}/cards`, {
+      method: 'GET',
+      headers: this._headers,
+    }).then((res) => this._getResponse(res))
+  }
+
+  setUserProfile(data) {
+    return fetch(`${this._url}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        about: data.about
+      })
+    }).then((res) => this._getResponse(res))
+  }
+
+  setUserAvatar(data) {
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: data.avatar
+      })
+    }).then((res) => this._getResponse(res))
+  }
+
+  postCard(data) {
+    return fetch(`${this._url}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link
+      })
+    }).then((res) => this._getResponse(res))
+  }
+
+  deleteCard(cardId) {
+    return fetch(`${this._url}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then((res) => this._getResponse(res))
+  }
+
+  changeLikes(cardId, isLiked) {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
+      method: `${!isLiked ? 'DELETE' : 'PUT'}`,
+      headers: this._headers,
+    }).then((res) => this._getResponse(res))
+  }
+
+  _getResponse(res) {
+    if (res.ok) {
+      return res.json();
     }
 
-    getUserProfile() {
-        return fetch(`${this._baseUrl}/cohort-50/users/me`, {
-            headers: this._headers,
-        }).then((res) => this._getResponse(res));
-    }
-
-    getInitialCards() {
-        return fetch(`${this._baseUrl}/cohort-50/cards`, {
-            headers: this._headers,
-        }).then((res) => this._getResponse(res));
-    }
-
-    setUserProfile(info) {
-        return fetch(`${this._baseUrl}/cohort-50/users/me`, {
-            method: 'PATCH',
-            headers: this._headers,
-            body: JSON.stringify({
-                name: info.name,
-                about: info.about,
-            }),
-        }).then((res) => this._getResponse(res));
-    }
-
-    setAvatar(info) {
-        return fetch(`${this._baseUrl}/cohort-50/users/me/avatar`, {
-            method: 'PATCH',
-            headers: this._headers,
-            body: JSON.stringify({avatar: info.avatar}),
-        }).then((res) => this._getResponse(res));
-    }
-
-    postCard(info) {
-        return fetch(`${this._baseUrl}/cohort-50/cards`, {
-            method: 'POST',
-            headers: this._headers,
-            body: JSON.stringify({
-                name: info.name,
-                link: info.link,
-            }),
-        }).then((res) => this._getResponse(res));
-    }
-
-    deleteCard(id) {
-        return fetch(`${this._baseUrl}/cohort-50/cards/${id}`, {
-            method: 'DELETE',
-            headers: this._headers,
-        }).then((res) => this._getResponse(res));
-    }
-
-    changeLikes(cardId, isLiked) {
-        return fetch(`${this._baseUrl}/cohort-50/cards/${cardId}/likes`, {
-            method: `${isLiked ? "DELETE" : "PUT"}`,
-            headers: this._headers,
-        }).then((res) => this._getResponse(res));
-    }
-
-    _getResponse(res) {
-        if (res.ok) {
-            return res.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
 }
 
-export const apiData = new Api({
-    baseUrl: 'https://mesto.nomoreparties.co/v1',
-    headers: {
-        authorization: '4b7aeb8e-d3bb-4c4d-815e-f3847a741fa0',
-        'Content-Type': 'application/json',
-    },
+const api = new Api({
+  baseUrl: 'https://api.mesto.valvdov.nomoredomains.club',
+  headers: {
+    'Accept': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  }
 });
+
+export default api;

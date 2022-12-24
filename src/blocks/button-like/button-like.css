@@ -1,17 +1,15 @@
 .button-like {
-  background-image: url(../../images/button_like.svg);
-  background-repeat: no-repeat;
+  background-color: transparent;
+  background-image: url(../../images/like-button.svg);
   background-position: center;
-  background-color: #fff;
-  min-width: 26px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 22px;
   height: 19px;
-  border: 0;
-  margin-left: 25px;
+  border: none;
   cursor: pointer;
-  transition: opacity ease-in 0.3s;
-  border-radius: 2px;
 }
 
 .button-like:hover {
-  opacity: 0.5;
+  opacity: 0.6;
 }

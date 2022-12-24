@@ -1,28 +1,17 @@
+import React from 'react';
 import truth from "../images/truth.svg"
 import error from "../images/error.svg"
 
-const InfoToolTip = (props) => {
-    return (
-        <div className={`popup popup_type_${props.name} ${props.isOpen && "popup_opened"}`}>
-            <div className="popup_type_infotooltip">
-                <button                     className="popup__close-button"
-                                            type="button"
-                                            id="item-close"
-                                            aria-label="Закрыть"
-                                            onClick={props.onClose} />
-                <img alt="Успешно!" className="popup_type_infotooltip__image" src={
-                    props.successfulReg
-                        ? truth
-                        : error}
-                />
-                <h2 className="popup_type_infotooltip__text">{
-                    props.successfulReg
-                        ? 'Вы успешно зарегистрировались!'
-                        : 'Что-то пошло не так! Попробуйте ещё раз.'}
-                </h2>
-            </div>
-        </div>
-    )
+function InfoTooltip({ isOpen, onClose, successfulReg }) {
+  return (
+    <div className={`popup ${isOpen ? "popup_opened" : ""}`}>
+    <div className="popup__container">
+      <button id="success-close-button" type="button" className="popup__close-button" onClick={onClose}/>
+      <img className="popup__signup-image" src={`${successfulReg ? truth : error}`} alt="" />
+      <h2 className="popup__signup-title">{`${successfulReg ? "Вы успешно зарегистрировались!" : "Что-то пошло не так! Попробуйте ещё раз."}`}</h2>
+    </div>
+  </div>
+  )
 }
 
-export default InfoToolTip;
+export default InfoTooltip;

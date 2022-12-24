@@ -1,52 +1,37 @@
 import { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+function Register({ onRegister }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+  }
 
 
-const Register = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegister(email, password);
+  }
 
-    function handleRegisterSubmit(e) {
-        e.preventDefault();
-        if (!email || !password) {
-            return;
-        }
-        props.handleReg(password, email);
-        setEmail('');
-        setPassword('');
-    }
-
-    function handleEmail(e) {
-        setEmail(e.target.value);
-    }
-
-    function handlePassword(e) {
-        setPassword(e.target.value);
-    }
-
-    return (
-        <section className="login">
-            <h1 className="auth__title">Регистрация</h1>
-            <form className="auth__form">
-                <input
-                    type="email"
-                    id="email"
-                    onChange={handleEmail}
-                    placeholder="Email"
-                    className="auth__input"
-                />
-                <input
-                    type="password"
-                    onChange={handlePassword}
-                    placeholder="Пароль"
-                    className="auth__input"
-                />
-                <button onClick={handleRegisterSubmit} className="auth__button auth__button_register">Зарегистрироваться</button>
-            </form>
-            <p className="auth__text"> Уже зарегистрированы?  <Link className="auth__link" to="/sign-in">Войти</Link> </p>
-
-        </section>
-    )
+  return (
+    <div className="auth">
+      <div className="auth__container">
+        <form name="register" className="auth__form" id="register-form" noValidate onSubmit={handleSubmit}>
+          <h2 className="auth__title">Регистрация</h2>
+          <input name="email" className="auth__input" id="email-input" type="text" placeholder="Email" value={email} onChange={handleChangeEmail} />
+          <input name="password" className="auth__input" id="password-input" type="password" placeholder="Пароль" value={password} onChange={handleChangePassword} />
+          <button type="submit" className="auth__button-save" id="auth-button-save">Зарегистрироваться</button>
+          <Link to="./sing-in" className="auth__button">Уже зарегистрированы? Войти</Link>
+        </form>
+      </div>
+    </div>
+  )
 }
 
-export default withRouter(Register);
+export default Register;
