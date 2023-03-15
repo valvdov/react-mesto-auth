@@ -45,6 +45,3 @@ The project is written on React
 1. Added validation of input fields in real time 
 2. Close window by pressing ESC 
 3. Close windows when overlay is clicked
-
-
-Translated with www.DeepL.com/Translator (free version)
